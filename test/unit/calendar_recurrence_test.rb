@@ -31,16 +31,4 @@ class CalendarRecurrenceTest < Test::Unit::TestCase
       end
     end
   end
-
-  def test_rrules
-    {
-      [1, nil, nil] => [{'FREQ'=>'MONTHLY', 'BYMONTHDAY'=>'1'}],
-      [nil, nil, 0] => [{'FREQ'=>'WEEKLY', 'BYDAY'=>'SU'}],
-      [nil, 0, 0] => [{'FREQ'=>'MONTHLY', 'BYDAY'=>'1SU'}],
-    }.each do |params, rrules|
-      recurrence = build(params)
-      assert_equal(rrules, @event.to_rrules)
-      @event.recurrences.clear
-    end
-  end
 end

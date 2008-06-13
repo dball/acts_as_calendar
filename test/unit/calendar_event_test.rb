@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/../test_helper'
+require 'set'
 
 class CalendarEventTest < Test::Unit::TestCase
   def setup
@@ -23,11 +24,9 @@ class CalendarEventTest < Test::Unit::TestCase
       @event.recurrences.clear
     end
 
-    expected_rrules = []
-    expectations.each do |params, rrules|
-      recurrence = build(params)
-      expected_rrules << rrules
-      assert (expected_rrules & @event.to_rrules).empty?
-    end
+    build([nil, nil, 0])
+    build([nil, nil, 1])
+    build([nil, nil, 6])
+    assert_equal([{'FREQ'=>'WEEKLY', 'BYDAY'=>'SU,MO,SA'}], @event.to_rrules)
   end
 end
