@@ -3,11 +3,20 @@ class CalendarRecurrence < ActiveRecord::Base
 
   validates_presence_of :calendar_event
 
-  # Not sure it's a great idea to increment these in lockstep
-  # Is the idea to generate all interesting permutations? That'd be cool.
-  # I wonder if the object could tell its daddy how many instances of itself
-  # it would take to check out the corner cases.
-  generator_for(:weekday, :start=>0) { |prev| (prev + 1) % 7 }
-  generator_for(:monthweek, :start=>0) { |prev| (prev + 1) % 4 }
-  generator_for(:monthday, :start=>1) { |prev| (prev + 1) % 28 }
+  validate :validate_pattern
+
+  def validate_pattern
+    errors.add_to_base('Invalid pattern') if !(monthly? || weekly?)
+  end
+
+  # Just a monthday or a monthweek and a weekday
+  def monthly?
+    (!monthday.nil? && monthweek.nil? && weekday.nil?) || 
+      (monthday.nil? && !monthweek.nil? && !weekday.nil?)
+  end
+
+  # No monthday and a weekday
+  def weekly?
+    monthday.nil? && !weekday.nil?
+  end
 end

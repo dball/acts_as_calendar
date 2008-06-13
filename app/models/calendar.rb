@@ -45,4 +45,15 @@ class Calendar < ActiveRecord::Base
   def fill_dates(values)
     values.each { |date| dates.create(:value => date) }
   end
+
+  def to_ical
+    ical = Icalendar::Calendar.new
+    ical.prodid = 'ActsAsCalendar'
+    ical.name = 'Foo'
+    ical.to_ical
+    events.each do |event|
+      ical.event do
+      end
+    end
+  end
 end

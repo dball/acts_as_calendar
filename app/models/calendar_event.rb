@@ -14,4 +14,29 @@ class CalendarEvent < ActiveRecord::Base
     {:class_name=>'CalendarDate', :join_table=>'calendar_event_dates'})
 
   validates_presence_of :calendar
+
+  def to_rrules
+    return nil unless recurrences
+    rrules = []
+    weekly = []
+    recurrences.each do |recurrence|
+      if recurrence.monthly?
+        rrules << (params = {'FREQ' => 'MONTHLY'})
+        if !recurrence.weekly?
+          params['BYMONTHDAY'] = recurrence.monthday
+        else
+          params['BYDAY'] = 
+            "#{recurrence.monthweek}#{Icalendar::DAYCODES[recurrence.weekday]}"
+        end
+      else
+        weekly << recurrence.weekday
+      end
+    end
+    if !weekly.empty?
+      rrules << {'FREQ' => 'WEEKLY',
+        'BYDAY' => weekly.map {|w| Icalendar::DAYCODES[w]}.join(',')}
+    end
+    rrules
+  end
+
 end

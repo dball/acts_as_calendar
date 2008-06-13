@@ -17,8 +17,6 @@ class CalendarDate < ActiveRecord::Base
   validates_presence_of :monthweek
   validates_presence_of :monthday
 
-  generator_for(:value, :start => Date.today) { |prev| prev.succ }
-
   before_validation_on_create :derive_date_parts
 
   private
