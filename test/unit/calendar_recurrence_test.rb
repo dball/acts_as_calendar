@@ -6,6 +6,11 @@ class CalendarRecurrenceTest < Test::Unit::TestCase
     @event = CalendarEvent.generate
   end
 
+  def build(params)
+    @event.recurrences.build(
+      {:monthday => params[0], :monthweek => params[1], :weekday => params[2]})
+  end
+
   def test_consistency
     {
       [nil, nil, nil] => false,
@@ -17,14 +22,25 @@ class CalendarRecurrenceTest < Test::Unit::TestCase
       [nil, nil, 0] => [:weekly?],
       [nil, 0, 0] => [:monthly?, :weekly?],
     }.each do |params, value|
-      recurrence = @event.recurrences.build(
-        {:monthday => params[0], :monthweek => params[1], :weekday => params[2]})
+      recurrence = build(params)
       if !value
         assert !recurrence.valid?
       else
         assert recurrence.valid?
         value.each {|sym| assert recurrence.send(sym)}
       end
+    end
+  end
+
+  def test_rrules
+    {
+      [1, nil, nil] => [{'FREQ'=>'MONTHLY', 'BYMONTHDAY'=>'1'}],
+      [nil, nil, 0] => [{'FREQ'=>'WEEKLY', 'BYDAY'=>'SU'}],
+      [nil, 0, 0] => [{'FREQ'=>'MONTHLY', 'BYDAY'=>'1SU'}],
+    }.each do |params, rrules|
+      recurrence = build(params)
+      assert_equal(rrules, @event.to_rrules)
+      @event.recurrences.clear
     end
   end
 end

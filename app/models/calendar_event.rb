@@ -23,10 +23,11 @@ class CalendarEvent < ActiveRecord::Base
       if recurrence.monthly?
         rrules << (params = {'FREQ' => 'MONTHLY'})
         if !recurrence.weekly?
-          params['BYMONTHDAY'] = recurrence.monthday
+          params['BYMONTHDAY'] = recurrence.monthday.to_s
         else
-          params['BYDAY'] = 
-            "#{recurrence.monthweek}#{Icalendar::DAYCODES[recurrence.weekday]}"
+          icalmw = ((mw = recurrence.monthweek) >= 0) ? mw + 1 : mw
+          icaldc = Icalendar::DAYCODES[recurrence.weekday]
+          params['BYDAY'] = icalmw.to_s + icaldc
         end
       else
         weekly << recurrence.weekday
