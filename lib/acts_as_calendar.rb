@@ -70,10 +70,10 @@ module ActsAsCalendar
   end
 end
 
-module Icalendar
-  DAYCODES = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA']
-
-  class Calendar < Component
-    ical_property :x_wr_calname, :name
-  end
-end
+#module Icalendar
+#  DAYCODES = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA']
+#
+#  class Calendar < Component
+#    ical_property :x_wr_calname, :name
+#  end
+#end
