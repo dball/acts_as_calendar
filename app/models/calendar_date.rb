@@ -20,9 +20,10 @@ class CalendarDate < ActiveRecord::Base
   before_validation_on_create :derive_date_parts
 
   private
-    def derive_date_parts
-      self.weekday = value.wday
-      self.monthday = value.mday
-      self.monthweek = monthday / 7
-    end
+
+  def derive_date_parts
+    self.weekday = value.wday
+    self.monthday = value.mday
+    self.monthweek = monthday / 7
+  end
 end
