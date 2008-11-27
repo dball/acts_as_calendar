@@ -16,6 +16,21 @@ describe CalendarRecurrence do
     lambda { Factory(:calendar_recurrence, { :weekday => 7 }) }.should raise_error(ActiveRecord::RecordInvalid)
   end
 
+  it "should allow weekly events that happen once a month" do
+    recurrence = Factory(:calendar_recurrence, { :weekday => 0, :monthweek => 0 })
+    recurrence.weekly?.should be_false
+    recurrence.monthly?.should be_true
+    recurrence.valid?.should be_true
+  end
+
+  it "should allow not weekly events that happen once a month with a monthweek < -1" do
+    lambda { Factory(:calendar_recurrence, { :weekday => 0, :monthweek => -2 }) }.should raise_error(ActiveRecord::RecordInvalid)
+  end
+
+  it "should allow not weekly events that happen once a month with a monthweek > 4" do
+    lambda { Factory(:calendar_recurrence, { :weekday => 0, :monthweek => 5 }) }.should raise_error(ActiveRecord::RecordInvalid)
+  end
+
   it "should allow monthly events" do
     recurrence = Factory(:calendar_recurrence, { :monthday => 1 })
     recurrence.weekly?.should be_false
