@@ -2,6 +2,8 @@ class CalendarRecurrence < ActiveRecord::Base
   belongs_to :calendar_event
 
   validates_presence_of :calendar_event
+  validates_inclusion_of :weekday, :in => 0..6, :allow_nil => true
+  validates_inclusion_of :monthday, :in => 0..31, :allow_nil => true
 
   validate :validate_pattern
 
