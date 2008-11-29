@@ -18,7 +18,7 @@ class AddCalendarTables < ActiveRecord::Migration
       t.column :end_date, :date
     end
  
-    create_table :calendar_occurrences do |t|
+    create_table :calendar_occurrences, :id => false do |t|
       t.column :calendar_event_id, :integer, :null=>false
       t.column :calendar_date_id, :integer, :null=>false
     end
@@ -50,7 +50,7 @@ AND cd.weekday = cr.weekday
 AND (cr.monthweek IS NULL OR cd.monthweek = cr.monthweek)
 )
 )
-WHERE cr.id IS NOT NULL OR co.id IS NOT NULL
+WHERE cr.id IS NOT NULL OR co.calendar_event_id IS NOT NULL
 "
   end
  
