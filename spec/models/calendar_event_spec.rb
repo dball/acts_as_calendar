@@ -32,7 +32,7 @@ describe CalendarEvent do
       @event = Factory(:calendar_event)
       @event.calendar.fill_dates(Date.parse('2008-01-01') .. Date.parse('2008-03-31'))
       @cdates = ['2008-01-18', '2008-01-20', '2008-01-25'].map do |value|
-        CalendarDate.find_by_value(value)
+        CalendarDate.find(:first, :conditions => { :value => value, :calendar_id => @event.calendar })
       end
       @cdates.each do |cdate|
         @event.occurrences << cdate
@@ -61,7 +61,7 @@ describe CalendarEvent do
 
     it "should have the expected dates" do
       @event.dates.should == ['2008-01-02', '2008-01-09', '2008-01-16', '2008-01-23', '2008-01-30', '2008-02-06', '2008-02-13', '2008-02-20', '2008-02-27', '2008-03-05', '2008-03-12', '2008-03-19', '2008-03-26'].map do |value|
-        CalendarDate.find_by_value(value)
+        CalendarDate.find(:first, :conditions => { :value => value, :calendar_id => @event.calendar })
       end
     end
   end
