@@ -97,5 +97,16 @@ describe CalendarEvent do
       it_should_behave_like "events with dates"
     end
 
+    describe "when it has monthly day of last week recurrences" do
+      before(:all) do
+        @event = Factory(:calendar_event, :calendar => @calendar)
+        @event.recurrences.create({ :weekday => 6, :monthweek => -1 })
+        @dates = ['2008-01-26', '2008-02-23', '2008-03-29']
+      end
+  
+      it_should_behave_like "all events"
+      it_should_behave_like "events with dates"
+    end
+
   end
 end
