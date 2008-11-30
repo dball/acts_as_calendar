@@ -50,7 +50,7 @@ describe CalendarEvent do
     end
   end
 
-  describe "when it has recurrences" do
+  describe "when it has weekly recurrences" do
     before(:all) do
       @event = Factory(:calendar_event)
       @event.calendar.fill_dates(Date.parse('2008-01-01') .. Date.parse('2008-03-31'))
@@ -61,6 +61,22 @@ describe CalendarEvent do
 
     it "should have the expected dates" do
       @event.dates.should == ['2008-01-02', '2008-01-09', '2008-01-16', '2008-01-23', '2008-01-30', '2008-02-06', '2008-02-13', '2008-02-20', '2008-02-27', '2008-03-05', '2008-03-12', '2008-03-19', '2008-03-26'].map do |value|
+        CalendarDate.find(:first, :conditions => { :value => value, :calendar_id => @event.calendar })
+      end
+    end
+  end
+
+  describe "when it has monthly recurrences" do
+    before(:all) do
+      @event = Factory(:calendar_event)
+      @event.calendar.fill_dates(Date.parse('2008-01-01') .. Date.parse('2008-03-31'))
+      @event.recurrences.create({ :monthday => 15 })
+    end
+
+    it_should_behave_like "all events"
+
+    it "should have the expected dates" do
+      @event.dates.should == ['2008-01-15', '2008-02-15', '2008-03-15'].map do |value|
         CalendarDate.find(:first, :conditions => { :value => value, :calendar_id => @event.calendar })
       end
     end
