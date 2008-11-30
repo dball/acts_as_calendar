@@ -37,7 +37,8 @@ SELECT
 ce.id AS calendar_event_id,
 cd.id AS calendar_date_id
 FROM calendar_dates cd
-INNER JOIN calendar_events ce ON cd.holiday = 'f'
+INNER JOIN calendar_events ce ON cd.holiday = 'f' 
+AND cd.calendar_id = ce.calendar_id
 AND (ce.start_date IS NULL OR cd.value >= ce.start_date)
 AND (ce.end_date IS NULL OR cd.value <= ce.end_date)
 LEFT OUTER JOIN calendar_occurrences co
