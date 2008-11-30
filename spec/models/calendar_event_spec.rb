@@ -1,5 +1,15 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
+module CalendarEventHelperMethods
+  def cdates
+    @dates.map { |value| cdate(value) }
+  end
+
+  def cdate(value)
+    CalendarDate.find(:first, :conditions => { :value => value, :calendar_id => @calendar })
+  end
+end
+
 describe CalendarEvent do
   describe "all events", :shared => true do
     it "should have a calendar" do
@@ -19,7 +29,7 @@ describe CalendarEvent do
     end
   end
 
-  describe "when created empty" do
+  describe "an empty event" do
     before(:all) do
       @event = Factory(:calendar_event)
     end
@@ -27,72 +37,64 @@ describe CalendarEvent do
     it_should_behave_like "all events"
   end
 
-  describe "when in a 3 month calendar" do
+  describe "events with dates", :shared => true do
+    include CalendarEventHelperMethods
+
+    before(:all) do
+    end
+
+    it "should have the expected dates" do
+      @event.dates.should == cdates
+    end
+  end
+
+  describe "a 3 month calendar" do
     before(:all) do
       @calendar = Calendar.create_for_dates(Date.parse('2008-01-01'), Date.parse('2008-03-31'))
     end
 
-    describe "when it has specific occurrences" do
+    describe "with specific occurrences" do
       before(:all) do
         @event = Factory(:calendar_event, :calendar => @calendar)
-        @cdates = ['2008-01-18', '2008-01-20', '2008-01-25'].map do |value|
-          CalendarDate.find(:first, :conditions => { :value => value, :calendar_id => @calendar })
-        end
-        @cdates.each do |cdate|
-          @event.occurrences << cdate
-        end
+        @dates = ['2008-01-18', '2008-01-20', '2008-01-25']
+        cdates.each { |cdate| @event.occurrences << cdate }
       end
   
       it_should_behave_like "all events"
-  
-      it "should have the expected dates" do
-        @event.dates.should == @cdates
-      end
+      it_should_behave_like "events with dates"
     end
   
-    describe "when it has weekly recurrences" do
+    describe "with weekly recurrences" do
       before(:all) do
         @event = Factory(:calendar_event, :calendar => @calendar)
         @event.recurrences.create({ :weekday => 3 })
+        @dates = ['2008-01-02', '2008-01-09', '2008-01-16', '2008-01-23', '2008-01-30', '2008-02-06', '2008-02-13', '2008-02-20', '2008-02-27', '2008-03-05', '2008-03-12', '2008-03-19', '2008-03-26']
       end
   
       it_should_behave_like "all events"
-  
-      it "should have the expected dates" do
-        @event.dates.should == ['2008-01-02', '2008-01-09', '2008-01-16', '2008-01-23', '2008-01-30', '2008-02-06', '2008-02-13', '2008-02-20', '2008-02-27', '2008-03-05', '2008-03-12', '2008-03-19', '2008-03-26'].map do |value|
-          CalendarDate.find(:first, :conditions => { :value => value, :calendar_id => @event.calendar })
-        end
-      end
+      it_should_behave_like "events with dates"
     end
   
     describe "when it has monthly day of month recurrences" do
       before(:all) do
         @event = Factory(:calendar_event, :calendar => @calendar)
         @event.recurrences.create({ :monthday => 15 })
+        @dates = ['2008-01-15', '2008-02-15', '2008-03-15']
       end
   
       it_should_behave_like "all events"
-  
-      it "should have the expected dates" do
-        @event.dates.should == ['2008-01-15', '2008-02-15', '2008-03-15'].map do |value|
-          CalendarDate.find(:first, :conditions => { :value => value, :calendar_id => @event.calendar })
-        end
-      end
+      it_should_behave_like "events with dates"
     end
 
     describe "when it has monthly day of week recurrences" do
       before(:all) do
         @event = Factory(:calendar_event, :calendar => @calendar)
         @event.recurrences.create({ :weekday => 6, :monthweek => 0 })
+        @dates = ['2008-01-05', '2008-02-02', '2008-03-01']
       end
   
       it_should_behave_like "all events"
-  
-      it "should have the expected dates" do
-        @event.dates.should == ['2008-01-05', '2008-02-02', '2008-03-01'].map do |value|
-          CalendarDate.find(:first, :conditions => { :value => value, :calendar_id => @event.calendar })
-        end
-      end
+      it_should_behave_like "events with dates"
     end
 
   end
