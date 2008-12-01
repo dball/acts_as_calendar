@@ -49,7 +49,7 @@ LEFT OUTER JOIN calendar_recurrences cr ON cr.calendar_event_id = ce.id
 AND ((cr.monthday IS NOT NULL AND cd.monthday = cr.monthday)
 OR (cr.monthday IS NULL AND cr.weekday IS NOT NULL
 AND cd.weekday = cr.weekday
-AND (cr.monthweek IS NULL OR cd.monthweek = cr.monthweek)
+AND (cr.monthweek IS NULL OR cd.monthweek = cr.monthweek OR (cr.monthweek = -1 AND cd.lastweek = -1))
 )
 )
 WHERE cr.id IS NOT NULL OR co.calendar_event_id IS NOT NULL
