@@ -6,9 +6,10 @@ class AddCalendarTables < ActiveRecord::Migration
     create_table :calendar_dates do |t|
       t.column :value, :date, :null=>false
       t.column :calendar_id, :integer, :null=>false
-      t.column :weekday, :integer, :null=>false
-      t.column :monthweek, :integer, :null=>false
-      t.column :monthday, :integer, :null=>false
+      t.column :weekday, :integer, :limit => 1, :null=>false
+      t.column :monthweek, :integer, :limit => 1, :null=>false
+      t.column :monthday, :integer, :limit => 1, :null=>false
+      t.column :lastweek, :integer, :limit => 1, :null=>false, :default=>0
       t.column :holiday, :boolean, :null=>false, :default=>false
     end
  
@@ -25,9 +26,9 @@ class AddCalendarTables < ActiveRecord::Migration
  
     create_table :calendar_recurrences do |t|
       t.column :calendar_event_id, :integer, :null=>false
-      t.column :weekday, :integer
-      t.column :monthweek, :integer
-      t.column :monthday, :integer
+      t.column :weekday, :integer, :limit => 1
+      t.column :monthweek, :integer, :limit => 1
+      t.column :monthday, :integer, :limit => 1
     end
  
     # FIXME - quote embedded holiday parameter
