@@ -33,6 +33,17 @@ describe CalendarDate do
     it "should have a monthweek between 0 and 4" do
       (0..4).include?(@date.monthweek).should be_true
     end
+
+    it "should have a lastweek of -1 or 0" do
+      (-1..0).include?(@date.lastweek).should be_true
+    end
+
+    it "should have lastweeks in the last week of the month" do
+      if @date.lastweek == -1
+        (@date.value + 7).month.should == 
+          (@date.value.month < 12 ? @date.value.month + 1 : 1)
+      end
+    end
   end
 
   (Date.parse('2008-01-01') .. Date.parse('2008-12-31')).each do |value|
