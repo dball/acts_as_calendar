@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require File.dirname(__FILE__) + '/../spec_rails_plugin_helper'
 
 describe CalendarRecurrence do
   it "should allow weekly events" do

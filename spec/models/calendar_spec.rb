@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require File.dirname(__FILE__) + '/../spec_rails_plugin_helper'
 
 describe Calendar, "when empty" do
   before(:each) do
