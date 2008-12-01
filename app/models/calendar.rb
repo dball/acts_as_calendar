@@ -1,5 +1,5 @@
 class Calendar < ActiveRecord::Base
-  include ActsAsCalendar
+  extend ActsAsCalendar
 
   has_many(:dates, 
     {:class_name=>'CalendarDate', :order=>'value', :dependent=>:delete_all}) do
