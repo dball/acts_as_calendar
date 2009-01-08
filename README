@@ -5,3 +5,29 @@ This rails plugin aims to provide support for calendar events, both discrete and
 Events may occur on specific dates, recur monthly on a given day (the 15th), a given day of a given week (1st Thursday, Last Saturday), or a given weekday (Every Friday), or any combination of the above.
 
 Recurring events are stored as patterns in the database, and are joined against a table of dates, decomposed into parts, into a view of event instances. This has the advantages of being easy and efficient to query, and of bypassing the typically non-standard database date functions. The disadvantage, of course, is that it requires a table of all potential dates against which to join. That being said, a century's worth of date data should only be a few hundred kilobytes, not large by today's standards. The limiting factor at the moment is in initially populating these data, it's fairly slow with ActiveRecord.
+
+== Status
+
+The plugin is far from complete. Specifically it could use:
+
+1. A nice way of supplying a migration to the rails app
+
+2. A nice API for creating and querying events
+
+3. A suggested strategy for annotating events with metadata - names, categories, etc. I've purposedfully kept this out of the base models, figuring that folks would create, say, Course objects which would point to the CalendarEvent objects, but it's unclear if this is really workable.
+
+4. The icalendar output is incomplete
+
+== Getting Started
+
+If you want to play with the object model anyway, install the plugin and:
+
+1. Copy the contents of db/migration.rb into a migration in the rails app, and migrate it.
+
+2. Create a calendar, e.g. calendar = Calendar.create_for_dates(Date.parse('2008-01-01'), Date.parse('2008-12-31'))
+
+3. Create an event, e.g. event = calendar.events.create
+
+4. Populate the event with occurrences, e.g. event.occurrences << calendar.dates.find_by_value('2008-01-01')
+
+5. Populate the event with recurrences, e.g. event.recurrences.create({ :weekday => 1 })
