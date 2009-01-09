@@ -31,3 +31,11 @@ If you want to play with the object model anyway, install the plugin and:
 4. Populate the event with occurrences, e.g. event.occurrences << calendar.dates.find_by_value('2008-01-01')
 
 5. Populate the event with recurrences, e.g. event.recurrences.create({ :weekday => 1 })
+
+6. Query for events:
+
+calendar.events.find_by_date(Date.parse('2008-01-01'))
+
+calendar.events.find_by_dates(Date.parse('2008-01-01'), Date.parse('2008-12-31'))
+
+The good bit to figure out how would be how to combine date searches with searches for event metadata, e.g. categories. Probably some named scope stuff would work.
