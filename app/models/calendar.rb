@@ -10,11 +10,11 @@ class Calendar < ActiveRecord::Base
 
   has_many(:events, {:class_name=>'CalendarEvent', :dependent=>:destroy}) do
     def create_for_dates(dates)
-      event = create
       if (dates.is_a?(String))
         dates = self.parse_dates(d = dates)
       end
       raise ArgumentError, d if dates.nil?
+      event = create
       if (dates.is_a?(Hash))
         event.recurrences.create(dates)
       else
