@@ -38,4 +38,19 @@ describe Calendar, "when created for certain dates" do
   it "should find no events for a range of dates" do
     @calendar.events.find_by_dates(@dates.first, @dates.last).should == []
   end
+
+  it "should find an event on the first date" do
+    event = @calendar.events.create
+    event.occurrences << @calendar.dates.find_by_value(@dates.first)
+    @calendar.events.find_by_date(@dates.first).should == [event]
+  end
+
+  it "should find an event on the first date" do
+    events = [@dates.first, @dates.last].map do |date|
+      event = @calendar.events.create
+      event.occurrences << @calendar.dates.find_by_value(date)
+      event
+    end
+    @calendar.events.find_by_dates(@dates.first, @dates.last).should == events
+  end
 end
