@@ -35,19 +35,52 @@ describe ActsAsCalendar do
 
     it "on 5/13/2008" do
       ExtendsCalendar.parse_dates('5/13/2008').should ==
-        Chronic.parse('2008-05-13')
+        ExtendsCalendar.parse_date('2008-05-13')
     end
 
     it "on 5/13, 5/15, 5/17" do
       ExtendsCalendar.parse_dates('5/13/08, 5/15/08, 5/17/08').should == 
         ["2008-05-13", "2008-05-15", "2008-05-17"].map do |value|
-          Chronic.parse(value)
+          ExtendsCalendar.parse_date(value)
         end
     end
 
     it "on jan 1st - jan 31st" do
       ExtendsCalendar.parse_dates('jan 1st - jan 31st').should ==
-        (Chronic.parse("jan 1st") .. Chronic.parse("jan 31st"))
+        (ExtendsCalendar.parse_date("jan 1st") .. ExtendsCalendar.parse_date("jan 31st"))
+    end
+  end
+
+  describe "parse method" do
+    before(:all) do
+      @strings = ['2008-01-01', '2008-01-15', '2008-01-31']
+      @dates = @strings.map {|string| ExtendsCalendar.parse_date(string) }
+    end
+
+    it "on a string date" do
+      ExtendsCalendar.parse(@strings.first).should == @dates.first
+    end
+
+    it "on a date date" do
+      ExtendsCalendar.parse(@dates.first).should == @dates.first
+    end
+
+    it "on an var array of string dates" do
+      ExtendsCalendar.parse(*@strings).should == @dates
+    end
+
+    it "on an var array of dates" do
+      ExtendsCalendar.parse(*@dates).should == @dates
+    end
+
+    it "on a two argument var array of string dates" do
+      ExtendsCalendar.parse(@strings.first, @strings.last).should == 
+        (@dates.first .. @dates.last)
+    end
+
+    it "on a two argument var array of dates" do
+      ExtendsCalendar.parse(@dates.first, @dates.last).should == 
+        (@dates.first .. @dates.last)
     end
   end
 end

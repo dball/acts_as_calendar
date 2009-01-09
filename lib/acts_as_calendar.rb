@@ -2,6 +2,28 @@ require 'chronic'
 
 # Some methods for parsing date expressions from strings
 module ActsAsCalendar
+  def parse(*args)
+    raise ArgumentError unless args.length > 0
+    if args.length == 1
+      case args[0]
+        when String: parse_dates(args[0])
+        when Date: args[0]
+        when Time: args[0]
+        else raise ArgumentError, args[0]
+      end
+    elsif args.length == 2
+      (parse_date(args[0]) .. parse_date(args[1]))
+    else
+      args.map {|arg| parse(arg) }
+    end
+  end
+
+  def parse_date(string)
+    if time = Chronic.parse(string)
+      time.send(:to_date)
+    end
+  end
+
   def parse_dates(string)
     if dates = parse_weekly_dates(string)
       return dates
@@ -14,17 +36,17 @@ module ActsAsCalendar
 
   def parse_specific_dates(value)
     if (parts = value.split('-')).length == 2
-      first = Chronic.parse(parts[0])
-      last = Chronic.parse(parts[1])
+      first = parse_date(parts[0])
+      last = parse_date(parts[1])
       if first && last
         return (first .. last)
       end
     elsif (parts = value.split(',')).length > 1
-      parts = parts.map {|part| Chronic.parse(part) }
+      parts = parts.map {|part| parse_date(part) }
       if parts.all? {|part| !part.nil? }
         return parts
       end
-    elsif date = Chronic.parse(value)
+    elsif date = parse_date(value)
       return date
     end
   end
