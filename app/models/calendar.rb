@@ -26,11 +26,11 @@ class Calendar < ActiveRecord::Base
     end
 
     def find_by_date(date)
-      find(:all, {:include=>:dates, :conditions => ['value = ?', date]})
+      find(:all, { :joins => :dates, :conditions => ['value = ?', date] })
     end
 
     def find_by_dates(start_date, end_date)
-      find(:all, {:include=>:dates, :conditions => ['value BETWEEN ? AND ?', start_date, end_date]})
+      find(:all, { :joins => :dates, :conditions => ['value BETWEEN ? AND ?', start_date, end_date] })
     end
   end
 

@@ -31,7 +31,11 @@ describe Calendar, "when created for certain dates" do
     @calendar.dates.values.should == @dates.to_a
   end
 
-  it "should find no events" do
+  it "should find no events for one date" do
     @calendar.events.find_by_date(@dates.first).should == []
+  end
+
+  it "should find no events for a range of dates" do
+    @calendar.events.find_by_dates(@dates.first, @dates.last).should == []
   end
 end
