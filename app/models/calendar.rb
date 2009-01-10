@@ -14,13 +14,13 @@ class Calendar < ActiveRecord::Base
 
   has_many(:events, {:class_name=>'CalendarEvent', :dependent=>:destroy}) do
     def create_for(*args)
-      pdates = Calendar.parse(*args)
+      dates = Calendar.parse(*args)
       event = create
-      case pdates
-        when Date: event.occurrences << event.calendar.dates.find_by_value(pdates)
-        when Hash: event.recurrences.create(pdates)
+      case dates
+        when Date: event.occurrences << event.calendar.dates.find_by_value(dates)
+        when Hash: event.recurrences.create(dates)
         when Enumerable
-          pdates.each do |date|
+          dates.each do |date|
             event.occurrences << event.calendar.dates.find_by_value(date)
           end
         else
@@ -29,12 +29,16 @@ class Calendar < ActiveRecord::Base
       event
     end
 
-    def find_by_date(date)
-      find(:all, { :joins => :dates, :conditions => ['value = ?', date] })
-    end
-
-    def find_by_dates(start_date, end_date)
-      find(:all, { :joins => :dates, :conditions => ['value BETWEEN ? AND ?', start_date, end_date] })
+    def find_by_dates(*args)
+      dates = Calendar.parse(*args)
+      conditions = case dates
+        when Date: ['value = ?', dates]
+        when Range: ['value BETWEEN ? AND ?', dates.first, dates.last]
+        when Enumerable: ['value IN (?)', dates]
+        else
+          raise ArgumentError
+      end
+      find(:all, { :joins => :dates, :conditions => conditions })
     end
   end
 

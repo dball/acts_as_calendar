@@ -32,7 +32,7 @@ describe Calendar, "when created for certain dates" do
   end
 
   it "should find no events for one date" do
-    @calendar.events.find_by_date(@dates.first).should == []
+    @calendar.events.find_by_dates(@dates.first).should == []
   end
 
   it "should find no events for a range of dates" do
@@ -42,7 +42,7 @@ describe Calendar, "when created for certain dates" do
   it "should find an event on the first date" do
     event = @calendar.events.create
     event.occurrences << @calendar.dates.find_by_value(@dates.first)
-    @calendar.events.find_by_date(@dates.first).should == [event]
+    @calendar.events.find_by_dates(@dates.first).should == [event]
   end
 
   it "should find an event on the first and last dates" do
