@@ -6,21 +6,25 @@ class Calendar < ActiveRecord::Base
     def values
       map {|d| d.value}
     end
+
+    def find_by_value(value)
+      find(:first, :conditions => { :value => value })
+    end
   end
 
   has_many(:events, {:class_name=>'CalendarEvent', :dependent=>:destroy}) do
-    def create_for_dates(dates)
-      if (dates.is_a?(String))
-        dates = self.parse_dates(d = dates)
-      end
-      raise ArgumentError, d if dates.nil?
+    def create_for(*args)
+      pdates = Calendar.parse(*args)
       event = create
-      if (dates.is_a?(Hash))
-        event.recurrences.create(dates)
-      else
-        dates.each do |date|
-          event.occurrences << CalendarDate.find_by_value(date)
-        end
+      case pdates
+        when Date: event.occurrences << event.calendar.dates.find_by_value(pdates)
+        when Hash: event.recurrences.create(pdates)
+        when Enumerable
+          pdates.each do |date|
+            event.occurrences << event.calendar.dates.find_by_value(date)
+          end
+        else
+          raise ArgumentError
       end
       event
     end

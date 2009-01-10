@@ -9,7 +9,8 @@ module ActsAsCalendar
         when String: parse_dates(args[0])
         when Date: args[0]
         when Time: args[0]
-        else raise ArgumentError, args[0]
+        when Enumerable: args[0].map {|arg| parse(arg)}
+        else raise ArgumentError, args[0].class.to_s
       end
     elsif args.length == 2
       (parse_date(args[0]) .. parse_date(args[1]))

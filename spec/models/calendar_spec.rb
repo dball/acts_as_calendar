@@ -23,7 +23,7 @@ end
 
 describe Calendar, "when created for certain dates" do
   before(:each) do
-    @dates = (Date.today .. 2.days.since(Date.today))
+    @dates = (Date.today .. 6.days.since(Date.today))
     @calendar = Calendar.create_for_dates(@dates.first, @dates.last)
   end
 
@@ -45,12 +45,33 @@ describe Calendar, "when created for certain dates" do
     @calendar.events.find_by_date(@dates.first).should == [event]
   end
 
-  it "should find an event on the first date" do
+  it "should find an event on the first and last dates" do
     events = [@dates.first, @dates.last].map do |date|
       event = @calendar.events.create
       event.occurrences << @calendar.dates.find_by_value(date)
       event
     end
     @calendar.events.find_by_dates(@dates.first, @dates.last).should == events
+  end
+
+  it "should create single date events" do
+    event = @calendar.events.create_for(@dates.first)
+    event.dates.map {|cdate| cdate.value}.should == [@dates.first]
+  end
+
+  it "should create date range events" do
+    event = @calendar.events.create_for(@dates.first, @dates.last)
+    event.dates.map {|cdate| cdate.value}.should == 
+      (@dates.first .. @dates.last).to_a
+  end
+
+  it "should create multi-day events from enumerables" do
+    event = @calendar.events.create_for(@dates)
+    event.dates.map {|cdate| cdate.value}.should == @dates.to_a
+  end
+
+  it "should create multi-day events from varargs" do
+    event = @calendar.events.create_for(*@dates)
+    event.dates.map {|cdate| cdate.value}.should == @dates.to_a
   end
 end
