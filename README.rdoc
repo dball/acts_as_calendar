@@ -1,5 +1,13 @@
 == Acts As Calendar
 
+I haven't touched this in a dog's age, but angelic has taken the ball and run with it:
+
+http://github.com/angelic/schedule_fu/tree/master
+
+Anyone who found this interesting should work from her repository.
+
+== Old Readme
+
 This rails plugin aims to provide support for calendar events, both discrete and recurring. The goal is to be able to attach a calendar to any model object, and to attach calendar events to any of that object's children or possibly descendents. The calendar data should be publishable in ical format, and possibly editable from as well, to the extent that the data model allows.
 
 Events may occur on specific dates, recur monthly on a given day (the 15th), a given day of a given week (1st Thursday, Last Saturday), or a given weekday (Every Friday), or any combination of the above.
