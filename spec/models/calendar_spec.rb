@@ -61,7 +61,7 @@ describe Calendar, "when created for certain dates" do
 
   it "should create date range events" do
     event = @calendar.events.create_for(@dates.first, @dates.last)
-    event.dates.map {|cdate| cdate.value}.should == 
+    event.dates.map {|cdate| cdate.value}.should ==
       (@dates.first .. @dates.last).to_a
   end
 

@@ -1,7 +1,7 @@
 class Calendar < ActiveRecord::Base
   extend ActsAsCalendar
 
-  has_many(:dates, 
+  has_many(:dates,
     {:class_name=>'CalendarDate', :order=>'value', :dependent=>:delete_all}) do
     def values
       map {|d| d.value}
