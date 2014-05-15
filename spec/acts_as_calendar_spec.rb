@@ -10,7 +10,7 @@ describe ActsAsCalendar do
 
   describe "parse_dates method" do
     it "on Saturdays" do
-      ExtendsCalendar.parse_dates('Saturdays').should == 
+      ExtendsCalendar.parse_dates('Saturdays').should ==
         { :weekday => 6, :monthweek => nil }
     end
 
@@ -39,7 +39,7 @@ describe ActsAsCalendar do
     end
 
     it "on 5/13, 5/15, 5/17" do
-      ExtendsCalendar.parse_dates('5/13/08, 5/15/08, 5/17/08').should == 
+      ExtendsCalendar.parse_dates('5/13/08, 5/15/08, 5/17/08').should ==
         ["2008-05-13", "2008-05-15", "2008-05-17"].map do |value|
           ExtendsCalendar.parse_date(value)
         end
@@ -74,12 +74,12 @@ describe ActsAsCalendar do
     end
 
     it "on a two argument var array of string dates" do
-      ExtendsCalendar.parse(@strings.first, @strings.last).should == 
+      ExtendsCalendar.parse(@strings.first, @strings.last).should ==
         (@dates.first .. @dates.last)
     end
 
     it "on a two argument var array of dates" do
-      ExtendsCalendar.parse(@dates.first, @dates.last).should == 
+      ExtendsCalendar.parse(@dates.first, @dates.last).should ==
         (@dates.first .. @dates.last)
     end
   end

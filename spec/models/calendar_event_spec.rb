@@ -59,29 +59,29 @@ describe CalendarEvent do
         @dates = ['2008-01-18', '2008-01-20', '2008-01-25']
         cdates.each { |cdate| @event.occurrences << cdate }
       end
-  
+
       it_should_behave_like "all events"
       it_should_behave_like "events with dates"
     end
-  
+
     describe "with weekly recurrences" do
       before(:all) do
         @event = Factory(:calendar_event, :calendar => @calendar)
         @event.recurrences.create({ :weekday => 3 })
         @dates = ['2008-01-02', '2008-01-09', '2008-01-16', '2008-01-23', '2008-01-30', '2008-02-06', '2008-02-13', '2008-02-20', '2008-02-27', '2008-03-05', '2008-03-12', '2008-03-19', '2008-03-26']
       end
-  
+
       it_should_behave_like "all events"
       it_should_behave_like "events with dates"
     end
-  
+
     describe "when it has monthly day of month recurrences" do
       before(:all) do
         @event = Factory(:calendar_event, :calendar => @calendar)
         @event.recurrences.create({ :monthday => 15 })
         @dates = ['2008-01-15', '2008-02-15', '2008-03-15']
       end
-  
+
       it_should_behave_like "all events"
       it_should_behave_like "events with dates"
     end
@@ -92,7 +92,7 @@ describe CalendarEvent do
         @event.recurrences.create({ :weekday => 6, :monthweek => 0 })
         @dates = ['2008-01-05', '2008-02-02', '2008-03-01']
       end
-  
+
       it_should_behave_like "all events"
       it_should_behave_like "events with dates"
     end
@@ -103,7 +103,7 @@ describe CalendarEvent do
         @event.recurrences.create({ :weekday => 6, :monthweek => -1 })
         @dates = ['2008-01-26', '2008-02-23', '2008-03-29']
       end
-  
+
       it_should_behave_like "all events"
       it_should_behave_like "events with dates"
     end

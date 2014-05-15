@@ -14,7 +14,7 @@ class CalendarRecurrence < ActiveRecord::Base
 
   # Just a monthday or a monthweek and a weekday
   def monthly?
-    (!monthday.nil? && monthweek.nil? && weekday.nil?) || 
+    (!monthday.nil? && monthweek.nil? && weekday.nil?) ||
       (monthday.nil? && !monthweek.nil? && !weekday.nil?)
   end
 
